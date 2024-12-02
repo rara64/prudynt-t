@@ -279,15 +279,17 @@ void *Worker::stream_grabber(void *arg)
     global_video[encChn]->imp_encoder = IMPEncoder::createNew(global_video[encChn]->stream, encChn, encChn, global_video[encChn]->name);
     global_video[encChn]->imp_framesource->enable();
 
-    gettimeofday(&imp_time_base, NULL);
-    uint64_t timebase = imp_time_base.tv_sec * (uint64_t)1000000;
+    //gettimeofday(&imp_time_base, NULL);
+    //uint64_t timebase = imp_time_base.tv_sec * (uint64_t)1000000;
+    //IMP_System_RebaseTimeStamp(timebase);
 
-    // timestamp rebase debug info
-    LOG_DEBUG("tv_sec: " << imp_time_base.tv_sec);
-    LOG_DEBUG("tv_usec: " << imp_time_base.tv_usec);
-    LOG_DEBUG("Rebase timestamp: " << timebase);
-    
+    time_point<system_clock> now = system_clock::now();
+    time_point<system_clock, microseconds> time_point = time_point_cast<microseconds>(now);
+    uint64_t timebase = time_point.time_since_epoch().count();
     IMP_System_RebaseTimeStamp(timebase);
+    
+    // timestamp rebase debug info
+    LOG_DEBUG("Rebase timestamp: " << timebase);
 
     // inform main that initialization is complete
     sh->has_started.release();
