@@ -280,7 +280,11 @@ void *Worker::stream_grabber(void *arg)
     global_video[encChn]->imp_framesource->enable();
 
     gettimeofday(&imp_time_base, NULL);
-    IMP_System_RebaseTimeStamp(imp_time_base.tv_sec * (uint64_t)1000000);
+    uint64_t timebase = imp_time_base.tv_sec * (uint64_t)1000000;
+    
+    LOG_DEBUG("Rebase timestamp" << timebase);
+    
+    IMP_System_RebaseTimeStamp(timebase);
 
     // inform main that initialization is complete
     sh->has_started.release();
