@@ -320,6 +320,10 @@ void *Worker::stream_grabber(void *arg)
                 }
 
                 int64_t nal_ts = stream.pack[stream.packCount - 1].timestamp;
+
+                // add timestamp debug info
+                LOG_DEBUG("New video timestamp (" << nal_ts << ") for stream " << encChn);
+                
                 struct timeval encoder_time;
                 encoder_time.tv_sec = nal_ts / 1000000;
                 encoder_time.tv_usec = nal_ts % 1000000;
