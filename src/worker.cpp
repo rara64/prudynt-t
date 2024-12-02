@@ -282,14 +282,12 @@ void *Worker::stream_grabber(void *arg)
     //gettimeofday(&imp_time_base, NULL);
     //uint64_t timebase = imp_time_base.tv_sec * (uint64_t)1000000;
     //IMP_System_RebaseTimeStamp(timebase);
-
-    steady_clock::time_point now = steady_clock::now();
-    time_point<steady_clock, microseconds> time_point = time_point_cast<microseconds>(now);
-    uint64_t timebase = time_point.time_since_epoch().count();
-    IMP_System_RebaseTimeStamp(timebase);
+    
+    uint64_t time_base = steady_clock::now().time_since_epoch().count();
+    IMP_System_RebaseTimeStamp(time_base);
     
     // timestamp rebase debug info
-    LOG_DEBUG("Rebase timestamp: " << timebase);
+    LOG_DEBUG("Rebase timestamp: " << time_base);
 
     // inform main that initialization is complete
     sh->has_started.release();
