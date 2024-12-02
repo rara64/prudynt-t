@@ -281,8 +281,11 @@ void *Worker::stream_grabber(void *arg)
 
     gettimeofday(&imp_time_base, NULL);
     uint64_t timebase = imp_time_base.tv_sec * (uint64_t)1000000;
-    
-    LOG_DEBUG("Rebase timestamp" << timebase);
+
+    // timestamp rebase debug info
+    LOG_DEBUG("tv_sec: " << imp_time_base.tv_sec);
+    LOG_DEBUG("tv_usec: " << imp_time_base.tv_usec);
+    LOG_DEBUG("Rebase timestamp: " << timebase);
     
     IMP_System_RebaseTimeStamp(timebase);
 
