@@ -283,8 +283,8 @@ void *Worker::stream_grabber(void *arg)
     //uint64_t timebase = imp_time_base.tv_sec * (uint64_t)1000000;
     //IMP_System_RebaseTimeStamp(timebase);
 
-    time_point<system_clock> now = system_clock::now();
-    time_point<system_clock, microseconds> time_point = time_point_cast<microseconds>(now);
+    steady_clock::time_point now = steady_clock::now();
+    time_point<steady_clock, microseconds> time_point = time_point_cast<microseconds>(now);
     uint64_t timebase = time_point.time_since_epoch().count();
     IMP_System_RebaseTimeStamp(timebase);
     
