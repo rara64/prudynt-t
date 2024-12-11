@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 env:
-  TAG_NAME: release
+  TAG_NAME: test-release-1
   TOOLCHAIN_MUSL: /home/runner/work/prudynt-t/prudynt-t/mipsel-thingino-linux-musl_sdk-buildroot/bin/mipsel-linux-
 
 jobs:
@@ -84,9 +84,6 @@ jobs:
       - name: Rename prudynt for release
         run: |
           mv bin/prudynt bin/prudynt-${{ matrix.target }}-${{ matrix.build_type }}
-
-      - name: Wait for file write
-        run: sleep 2
         
       - name: Upload binary as artifact
         uses: actions/upload-artifact@v4
@@ -94,10 +91,6 @@ jobs:
           name: prudynt-${{ matrix.target }}-${{ matrix.build_type }}
           path: |
             bin/prudynt-${{ matrix.target }}-${{ matrix.build_type }}
-            
-      - name: List files in artifact directory
-        run: |
-          ls -la bin/
           
       - name: Upload binary to release
         if: github.event_name != 'pull_request'
