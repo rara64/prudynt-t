@@ -96,5 +96,6 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@master
         with:
+          tag_name: "test-release-1"
           files: |
             bin/prudynt-${{ matrix.target }}-${{ matrix.build_type }}
