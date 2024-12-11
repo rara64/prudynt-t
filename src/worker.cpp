@@ -328,9 +328,9 @@ void *Worker::stream_grabber(void *arg)
                 // add timestamp debug info
                 LOG_DEBUG("New video timestamp (" << nal_ts << ") for stream " << encChn);
                 
-                struct timeval encoder_time;
-                encoder_time.tv_sec = nal_ts / 1000000;
-                encoder_time.tv_usec = nal_ts % 1000000;
+                //struct timeval encoder_time;
+                //encoder_time.tv_sec = nal_ts / 1000000;
+                //encoder_time.tv_usec = nal_ts % 1000000;
 
                 for (uint32_t i = 0; i < stream.packCount; ++i)
                 {
@@ -349,7 +349,7 @@ void *Worker::stream_grabber(void *arg)
                         H264NALUnit nalu;
 
                         nalu.imp_ts = stream.pack[i].timestamp;
-                        nalu.time = encoder_time;
+                        //nalu.time = encoder_time;
 
                         // We use start+4 because the encoder inserts 4-byte MPEG
                         //'startcodes' at the beginning of each NAL. Live555 complains
