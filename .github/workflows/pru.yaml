@@ -85,13 +85,20 @@ jobs:
         run: |
           mv bin/prudynt bin/prudynt-${{ matrix.target }}-${{ matrix.build_type }}
 
+      - name: Wait for file write
+        run: sleep 2
+        
       - name: Upload binary as artifact
         uses: actions/upload-artifact@v4
         with:
           name: prudynt-${{ matrix.target }}-${{ matrix.build_type }}
           path: |
             bin/prudynt-${{ matrix.target }}-${{ matrix.build_type }}
-
+            
+      - name: List files in artifact directory
+        run: |
+          ls -la bin/
+          
       - name: Upload binary to release
         if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@master
@@ -99,4 +106,3 @@ jobs:
           tag_name: "test-release-1"
           files: |
             bin/prudynt-${{ matrix.target }}-${{ matrix.build_type }}
-          retries: 3
