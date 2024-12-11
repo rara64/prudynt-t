@@ -98,4 +98,4 @@ jobs:
         with:
           tag_name: "test-release-1"
           files: |
-            bin/prudynt-${{ matrix.target }}-${{ matrix.build_type }}
+            ./bin/prudynt-${{ matrix.target }}-${{ matrix.build_type }}
