@@ -97,7 +97,6 @@ int main(int argc, const char *argv[])
     // Rebase timestamp 
     auto now = steady_clock::now();
     IMP_System_RebaseTimeStamp(duration_cast<microseconds>(now.time_since_epoch()).count());
-    time_base_initialized = true;
 
     global_video[0] = std::make_shared<video_stream>(0, &cfg->stream0, "stream0");
     global_video[1] = std::make_shared<video_stream>(1, &cfg->stream1, "stream1");
