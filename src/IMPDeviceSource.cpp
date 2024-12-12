@@ -76,7 +76,8 @@ void IMPDeviceSource<FrameType, Stream>::deliverFrame()
         }
 
         fPresentationTime = nal.time;
-        
+
+        DEBUG_LOG("nal.Data[0] size is " << sizeof(&nal.data[0]) << ", expected " << fFrameSize);
         memcpy(fTo, &nal.data[0], fFrameSize);
 
         if (fFrameSize > 0)

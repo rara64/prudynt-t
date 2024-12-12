@@ -273,7 +273,6 @@ void *Worker::stream_grabber(void *arg)
     uint32_t fps = 0;
     uint32_t error_count = 0;
     unsigned long long ms = 0;
-    struct timeval imp_time_base;
 
     global_video[encChn]->imp_framesource = IMPFramesource::createNew(global_video[encChn]->stream, &cfg->sensor, encChn);
     global_video[encChn]->imp_encoder = IMPEncoder::createNew(global_video[encChn]->stream, encChn, encChn, global_video[encChn]->name);
@@ -297,6 +296,10 @@ void *Worker::stream_grabber(void *arg)
      */
     global_video[encChn]->active = true;
     global_video[encChn]->running = true;
+    
+    uint64_t last_imp_ts = 0;
+    int frame_counter = 0;
+    
     while (global_video[encChn]->running)
     {
         /* bool helper to check if this is the active jpeg channel and a jpeg is requested while 
@@ -320,16 +323,27 @@ void *Worker::stream_grabber(void *arg)
                     continue;
                 }
 
-                int64_t nal_ts = stream.pack[stream.packCount - 1].timestamp;
-                struct timeval encoder_time;
-                encoder_time.tv_sec = nal_ts / 1000000;
-                encoder_time.tv_usec = nal_ts % 1000000;
-
                 for (uint32_t i = 0; i < stream.packCount; ++i)
                 {
                     fps++;
                     bps += stream.pack[i].length;
+                    
+                    uint64_t imp_ts =  stream.pack[i].timestamp - imp_time_base;
+                    
+                    if (imp_ts <= last_imp_ts) // Ensure monotocity
+                    {
+                        imp_ts = last_imp_ts + 1;
+                    }
+                    
+                    last_imp_ts = imp_ts;
 
+                    LOG_DEBUG("Stream " << encChn << " #" << frame_counter << " Streampack timestamp: " << stream.pack[i].timestamp);
+                    LOG_DEBUG("Stream " << encChn << " #" << frame_counter << " New timestamp: " << imp_ts);
+
+                    struct timeval encoder_time;
+                    encoder_time.tv_sec = imp_ts / 1000000;
+                    encoder_time.tv_usec = imp_ts % 1000000;
+                    
                     if (global_video[encChn]->hasDataCallback)
                     {
 #if defined(PLATFORM_T31)
