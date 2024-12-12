@@ -103,11 +103,6 @@ int main(int argc, const char *argv[])
     global_audio[0] = std::make_shared<audio_stream>(1, 0, 0);
 #endif
 
-    // Rebase timestamp for IMP system
-    uint64_t imp_time_base = duration_cast<microseconds>(steady_clock::now().time_since_epoch()).count();
-    IMP_System_RebaseTimeStamp(imp_time_base);
-    LOG_DEBUG("IMP_System_RebaseTimeStamp(" << imp_time_base << ");");
-
     pthread_create(&cf_thread, nullptr, Worker::watch_config_poll, nullptr);
     pthread_create(&ws_thread, nullptr, WS::run, &ws);
 
