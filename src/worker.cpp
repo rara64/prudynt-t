@@ -327,8 +327,9 @@ void *Worker::stream_grabber(void *arg)
                 {
                     fps++;
                     bps += stream.pack[i].length;
-
+                    
                     uint64_t imp_ts =  stream.pack[i].timestamp - imp_time_base;
+                    LOG_DEBUG("Streampack timestamp: " << stream.pack[i].timestamp);
                     
                     if (imp_ts <= last_imp_ts) // Ensure monotocity
                     {
