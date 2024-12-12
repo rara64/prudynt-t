@@ -292,6 +292,8 @@ void *Worker::stream_grabber(void *arg)
      */
     global_video[encChn]->active = true;
     global_video[encChn]->running = true;
+    uint64_t last_imp_ts = 0;
+    
     while (global_video[encChn]->running)
     {
         /* bool helper to check if this is the active jpeg channel and a jpeg is requested while 
@@ -315,16 +317,24 @@ void *Worker::stream_grabber(void *arg)
                     continue;
                 }
 
-                int64_t nal_ts = stream.pack[stream.packCount - 1].timestamp;
-                struct timeval encoder_time;
-                encoder_time.tv_sec = nal_ts / 1000000;
-                encoder_time.tv_usec = nal_ts % 1000000;
-
                 for (uint32_t i = 0; i < stream.packCount; ++i)
                 {
                     fps++;
                     bps += stream.pack[i].length;
 
+                    uint64_t imp_ts =  stream.pack[i].timestamp;
+                    
+                    if (imp_ts <= last_imp_ts) // Ensure monotocity
+                    {
+                        imp_ts = last_imp_ts + 1;
+                    }
+                    
+                    last_imp_ts = imp_ts;
+
+                    struct timeval encoder_time;
+                    encoder_time.tv_sec = imp_ts / 1000000;
+                    encoder_time.tv_usec = imp_ts % 1000000;
+                    
                     if (global_video[encChn]->hasDataCallback)
                     {
 #if defined(PLATFORM_T31)
@@ -336,7 +346,7 @@ void *Worker::stream_grabber(void *arg)
 #endif
                         H264NALUnit nalu;
 
-                        nalu.imp_ts = stream.pack[i].timestamp;
+                        nalu.imp_ts = imp_ts;
                         nalu.time = encoder_time;
 
                         // We use start+4 because the encoder inserts 4-byte MPEG
