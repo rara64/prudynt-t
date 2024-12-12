@@ -343,6 +343,8 @@ void *Worker::stream_grabber(void *arg)
                         nalu.imp_ts = stream.pack[i].timestamp;
                         nalu.time = encoder_time;
 
+                        LOG_DEBUG("Stream " << encChn << " - Streampack timestamp " << stream.pack[i].timestamp << " with encoder time" << encoder_time);
+
                         // We use start+4 because the encoder inserts 4-byte MPEG
                         //'startcodes' at the beginning of each NAL. Live555 complains
                         nalu.data.insert(nalu.data.end(), start + 4, end);
