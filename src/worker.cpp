@@ -278,6 +278,11 @@ void *Worker::stream_grabber(void *arg)
     global_video[encChn]->imp_encoder = IMPEncoder::createNew(global_video[encChn]->stream, encChn, encChn, global_video[encChn]->name);
     global_video[encChn]->imp_framesource->enable();
 
+    // Rebase timestamp for IMP system
+    uint64_t imp_time_base = duration_cast<microseconds>(steady_clock::now().time_since_epoch()).count();
+    IMP_System_RebaseTimeStamp(imp_time_base);
+    LOG_DEBUG("IMP_System_RebaseTimeStamp(" << imp_time_base << ");");
+
     // inform main that initialization is complete
     sh->has_started.release();
 
@@ -292,6 +297,7 @@ void *Worker::stream_grabber(void *arg)
      */
     global_video[encChn]->active = true;
     global_video[encChn]->running = true;
+    
     uint64_t last_imp_ts = 0;
     
     while (global_video[encChn]->running)
@@ -322,7 +328,7 @@ void *Worker::stream_grabber(void *arg)
                     fps++;
                     bps += stream.pack[i].length;
 
-                    uint64_t imp_ts =  stream.pack[i].timestamp;
+                    uint64_t imp_ts =  stream.pack[i].timestamp - imp_time_base;
                     
                     if (imp_ts <= last_imp_ts) // Ensure monotocity
                     {
