@@ -299,6 +299,7 @@ void *Worker::stream_grabber(void *arg)
     global_video[encChn]->running = true;
     
     uint64_t last_imp_ts = 0;
+    int frame_counter = 0;
     
     while (global_video[encChn]->running)
     {
@@ -329,7 +330,6 @@ void *Worker::stream_grabber(void *arg)
                     bps += stream.pack[i].length;
                     
                     uint64_t imp_ts =  stream.pack[i].timestamp - imp_time_base;
-                    LOG_DEBUG("Streampack timestamp: " << stream.pack[i].timestamp);
                     
                     if (imp_ts <= last_imp_ts) // Ensure monotocity
                     {
@@ -337,6 +337,9 @@ void *Worker::stream_grabber(void *arg)
                     }
                     
                     last_imp_ts = imp_ts;
+
+                    LOG_DEBUG("Stream " << encChn << " #" << frame_counter << " Streampack timestamp: " << stream.pack[i].timestamp);
+                    LOG_DEBUG("Stream " << encChn << " #" << frame_counter << " New timestamp: " << imp_ts);
 
                     struct timeval encoder_time;
                     encoder_time.tv_sec = imp_ts / 1000000;
