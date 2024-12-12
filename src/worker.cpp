@@ -280,7 +280,8 @@ void *Worker::stream_grabber(void *arg)
     global_video[encChn]->imp_framesource->enable();
 
     gettimeofday(&imp_time_base, NULL);
-    IMP_System_RebaseTimeStamp(imp_time_base.tv_sec * (uint64_t)1000000);
+    //IMP_System_RebaseTimeStamp(imp_time_base.tv_sec * (uint64_t)1000000);
+    IMP_System_RebaseTimeStamp(1000000);
 
     // inform main that initialization is complete
     sh->has_started.release();
@@ -341,9 +342,9 @@ void *Worker::stream_grabber(void *arg)
                         H264NALUnit nalu;
 
                         nalu.imp_ts = stream.pack[i].timestamp;
-                        nalu.time = encoder_time;
+                        //nalu.time = encoder_time;
 
-                        LOG_DEBUG("Stream " << encChn << " - Streampack timestamp " << stream.pack[i].timestamp << " with encoder time" << encoder_time);
+                        LOG_DEBUG("Stream " << encChn << " - Streampack timestamp " << stream.pack[i].timestamp);
 
                         // We use start+4 because the encoder inserts 4-byte MPEG
                         //'startcodes' at the beginning of each NAL. Live555 complains
