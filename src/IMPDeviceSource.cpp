@@ -43,7 +43,7 @@ void IMPDeviceSource<FrameType, Stream>::deinit()
 template<typename FrameType, typename Stream>
 IMPDeviceSource<FrameType, Stream>::~IMPDeviceSource()
 {
-    LOG_DEBUG("IMPDeviceSource destructor called, encChn:" << encChn << " object: " << oss.str() << " type: " << typeid(*this).name());
+    LOG_DEBUG("IMPDeviceSource destructor called, encChn:" << encChn << " object: " << this << " type: " << typeid(*this).name());
     deinit();
 }
 
