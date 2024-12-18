@@ -3,6 +3,7 @@
 #include "GroupsockHelper.hh"
 #include <sstream> // debug
 #include <typeinfo> // debug
+#include <execinfo.h> // debug
 
 // explicit instantiation
 template class IMPDeviceSource<H264NALUnit, video_stream>;
@@ -44,7 +45,18 @@ void IMPDeviceSource<FrameType, Stream>::deinit()
     //LOG_DEBUG("IMPDeviceSource " << name << " destructed, encoder channel:" << encChn);
     std::ostringstream oss;
     oss << this;
-    LOG_DEBUG("IMPDeviceSource " << name << " deinit called, encChn:" << encChn << " object:" << oss.str());
+    
+    void* callstack[128];
+    int frames = backtrace(callstack, 128);
+    char** symbols = backtrace_symbols(callstack, frames);
+    
+    std::ostringstream bt_oss;
+    for(int i = 0; i < frames; i++) {
+        bt_oss << symbols[i] << "\n";
+    }
+    free(symbols);
+   
+    LOG_DEBUG("IMPDeviceSource " << name << " deinit called, encChn:" << encChn << " object: " << oss.str() << " backtrace:\n" << bt_oss.str());
 }
 
 template<typename FrameType, typename Stream>
