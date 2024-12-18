@@ -3,7 +3,6 @@
 #include "GroupsockHelper.hh"
 #include <sstream> // debug
 #include <typeinfo> // debug
-#include <execinfo.h> // debug
 
 // explicit instantiation
 template class IMPDeviceSource<H264NALUnit, video_stream>;
