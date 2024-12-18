@@ -89,8 +89,6 @@ void RTSP::start()
 {
     scheduler = BasicTaskScheduler::createNew();
     env = BasicUsageEnvironment::createNew(*scheduler);
-    // debug
-    env->setVerbosityLevel(4);
 
     if (cfg->rtsp.auth_required)
     {
