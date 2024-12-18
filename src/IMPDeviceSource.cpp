@@ -1,8 +1,8 @@
 #include "IMPDeviceSource.hpp"
 #include <iostream>
 #include "GroupsockHelper.hh"
-#include <sstream> // debug
-#include <typeinfo> // debug
+//#include <sstream> // debug
+//#include <typeinfo> // debug
 
 // explicit instantiation
 template class IMPDeviceSource<H264NALUnit, video_stream>;
@@ -26,10 +26,10 @@ IMPDeviceSource<FrameType, Stream>::IMPDeviceSource(UsageEnvironment &env, int e
 
     eventTriggerId = envir().taskScheduler().createEventTrigger(deliverFrame0);
     stream->should_grab_frames.notify_one();
-    //LOG_DEBUG("IMPDeviceSource " << name << " constructed, encoder channel:" << encChn);
-    std::ostringstream oss;
-    oss << this;
-    LOG_DEBUG("IMPDeviceSource " << name << " constructed, encChn:" << encChn << " object:" << oss.str());
+    LOG_DEBUG("IMPDeviceSource " << name << " constructed, encoder channel:" << encChn);
+    //std::ostringstream oss;
+    //oss << this;
+    //LOG_DEBUG("IMPDeviceSource " << name << " constructed, encChn:" << encChn << " object:" << oss.str());
 
 }
 
@@ -41,29 +41,17 @@ void IMPDeviceSource<FrameType, Stream>::deinit()
     envir().taskScheduler().deleteEventTrigger(eventTriggerId);
     stream->hasDataCallback = false;
     stream->onDataCallback = nullptr;
-    //LOG_DEBUG("IMPDeviceSource " << name << " destructed, encoder channel:" << encChn);
-    std::ostringstream oss;
-    oss << this;
-    
-    void* callstack[128];
-    int frames = backtrace(callstack, 128);
-    char** symbols = backtrace_symbols(callstack, frames);
-    
-    std::ostringstream bt_oss;
-    for(int i = 0; i < frames; i++) {
-        bt_oss << symbols[i] << "\n";
-    }
-    free(symbols);
-   
-    LOG_DEBUG("IMPDeviceSource " << name << " deinit called, encChn:" << encChn << " object: " << oss.str() << " backtrace:\n" << bt_oss.str());
+    LOG_DEBUG("IMPDeviceSource " << name << " destructed, encoder channel:" << encChn);
+
+    //LOG_DEBUG("IMPDeviceSource " << name << " deinit called, encChn:" << encChn << " object: " << oss.str() << " backtrace:\n" << bt_oss.str());
 }
 
 template<typename FrameType, typename Stream>
 IMPDeviceSource<FrameType, Stream>::~IMPDeviceSource()
 {
-    std::ostringstream oss;
-    oss << this;
-    LOG_DEBUG("IMPDeviceSource destructor called, encChn:" << encChn << " object: " << oss.str() << " type: " << typeid(*this).name());
+    //std::ostringstream oss;
+    //oss << this;
+    //LOG_DEBUG("IMPDeviceSource destructor called, encChn:" << encChn << " object: " << oss.str() << " type: " << typeid(*this).name());
     deinit();
 }
 
