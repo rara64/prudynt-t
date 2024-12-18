@@ -24,7 +24,8 @@ IMPDeviceSource<FrameType, Stream>::IMPDeviceSource(UsageEnvironment &env, int e
 
     eventTriggerId = envir().taskScheduler().createEventTrigger(deliverFrame0);
     stream->should_grab_frames.notify_one();
-    LOG_DEBUG("IMPDeviceSource " << name << " constructed, encoder channel:" << encChn);
+    //LOG_DEBUG("IMPDeviceSource " << name << " constructed, encoder channel:" << encChn);
+    LOG_DEBUG("IMPDeviceSource " << name << " constructed, encChn:" << encChn << " object:" << this);
 }
 
 template<typename FrameType, typename Stream>
@@ -35,12 +36,17 @@ void IMPDeviceSource<FrameType, Stream>::deinit()
     envir().taskScheduler().deleteEventTrigger(eventTriggerId);
     stream->hasDataCallback = false;
     stream->onDataCallback = nullptr;
-    LOG_DEBUG("IMPDeviceSource " << name << " destructed, encoder channel:" << encChn);
+    //LOG_DEBUG("IMPDeviceSource " << name << " destructed, encoder channel:" << encChn);
+    LOG_DEBUG("IMPDeviceSource " << name << " deinit called, encChn:" << encChn << " object:" << this);
 }
 
 template<typename FrameType, typename Stream>
 IMPDeviceSource<FrameType, Stream>::~IMPDeviceSource()
 {
+    int status;
+    char* realname = abi::__cxa_demangle(typeid(*this).name(), 0, 0, &status);
+    LOG_DEBUG("IMPDeviceSource destructor called,  encChn:" << encChn <<  " object:" << this <<  " type:" << realname);
+    free(realname);
     deinit();
 }
 
