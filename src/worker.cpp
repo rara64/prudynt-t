@@ -394,10 +394,10 @@ void *Worker::stream_grabber(void *arg)
                             }
                         }
 
-                        LOG_DEBUG("Frame Received. chn:" << encChn
-                         << " ts: " << nalu.imp_ts <<
-                         ", data size:" << nalu.data.size() << 
-                         ", packet:" << i << " of " << stream.packCount);
+                        //LOG_DEBUG("Frame Received. chn:" << encChn
+                        // << " ts: " << nalu.imp_ts <<
+                        // ", data size:" << nalu.data.size() << 
+                        // ", packet:" << i << " of " << stream.packCount);
                     }
                 }
 
