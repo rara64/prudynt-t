@@ -1,6 +1,8 @@
 #include "IMPDeviceSource.hpp"
 #include <iostream>
 #include "GroupsockHelper.hh"
+#include <sstream> // debug
+#include <typeinfo> // debug
 
 // explicit instantiation
 template class IMPDeviceSource<H264NALUnit, video_stream>;
@@ -25,7 +27,10 @@ IMPDeviceSource<FrameType, Stream>::IMPDeviceSource(UsageEnvironment &env, int e
     eventTriggerId = envir().taskScheduler().createEventTrigger(deliverFrame0);
     stream->should_grab_frames.notify_one();
     //LOG_DEBUG("IMPDeviceSource " << name << " constructed, encoder channel:" << encChn);
-    LOG_DEBUG("IMPDeviceSource " << name << " constructed, encChn:" << encChn << " object:" << this);
+    std::ostringstream oss;
+    oss << this;
+    LOG_DEBUG("IMPDeviceSource " << name << " constructed, encChn:" << encChn << " object:" << oss.str());
+
 }
 
 template<typename FrameType, typename Stream>
@@ -37,13 +42,17 @@ void IMPDeviceSource<FrameType, Stream>::deinit()
     stream->hasDataCallback = false;
     stream->onDataCallback = nullptr;
     //LOG_DEBUG("IMPDeviceSource " << name << " destructed, encoder channel:" << encChn);
-    LOG_DEBUG("IMPDeviceSource " << name << " deinit called, encChn:" << encChn << " object:" << this);
+    std::ostringstream oss;
+    oss << this;
+    LOG_DEBUG("IMPDeviceSource " << name << " deinit called, encChn:" << encChn << " object:" << oss.str());
 }
 
 template<typename FrameType, typename Stream>
 IMPDeviceSource<FrameType, Stream>::~IMPDeviceSource()
 {
-    LOG_DEBUG("IMPDeviceSource destructor called, encChn:" << encChn << " object: " << this << " type: " << typeid(*this).name());
+    std::ostringstream oss;
+    oss << this;
+    LOG_DEBUG("IMPDeviceSource destructor called, encChn:" << encChn << " object: " << oss.str() << " type: " << typeid(*this).name());
     deinit();
 }
 
