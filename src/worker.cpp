@@ -342,6 +342,11 @@ void *Worker::stream_grabber(void *arg)
                         encoder_time.tv_usec = nalu.imp_ts % 1000000;
                         nalu.time = encoder_time;
 
+                        LOG_DEBUG("Frame Received. chn:" << encChn
+                         << " ts: " << nalu.imp_ts <<
+                         ", data size:" << nalu.data.size() << 
+                         ", packet:" << i << " of " << stream.packCount);
+
                         // We use start+4 because the encoder inserts 4-byte MPEG
                         //'startcodes' at the beginning of each NAL. Live555 complains
                         nalu.data.insert(nalu.data.end(), start + 4, end);
