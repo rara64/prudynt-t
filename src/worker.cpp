@@ -315,10 +315,10 @@ void *Worker::stream_grabber(void *arg)
                     continue;
                 }
 
-                int64_t nal_ts = stream.pack[stream.packCount - 1].timestamp;
-                struct timeval encoder_time;
-                encoder_time.tv_sec = nal_ts / 1000000;
-                encoder_time.tv_usec = nal_ts % 1000000;
+                //int64_t nal_ts = stream.pack[stream.packCount - 1].timestamp;
+                //struct timeval encoder_time;
+                //encoder_time.tv_sec = nal_ts / 1000000;
+               // encoder_time.tv_usec = nal_ts % 1000000;
 
                 for (uint32_t i = 0; i < stream.packCount; ++i)
                 {
@@ -337,6 +337,9 @@ void *Worker::stream_grabber(void *arg)
                         H264NALUnit nalu;
 
                         nalu.imp_ts = stream.pack[i].timestamp;
+                        struct timeval encoder_time;
+                        encoder_time.tv_sec = nalu.imp_ts / 1000000;
+                        encoder_time.tv_usec = nalu.imp_ts % 1000000;
                         nalu.time = encoder_time;
 
                         // We use start+4 because the encoder inserts 4-byte MPEG
