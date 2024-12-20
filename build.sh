@@ -108,7 +108,7 @@ deps() {
 "
 335,337c335,349
 < #ifdef DEBUG_RR
-<   fprintf(stderr, "RTCP RR data (received at %lu.%06ld): lossStats 0x%08x, lastPacketNumReceived 0x%08x, jitter 0x%08x, lastSRTime 0x%08x, diffSR_RRTime 0x%08x\n",
+<   fprintf(stderr, \"RTCP RR data (received at %lu.%06ld): lossStats 0x%08x, lastPacketNumReceived 0x%08x, jitter 0x%08x, lastSRTime 0x%08x, diffSR_RRTime 0x%08x\n\",
 <           fTimeReceived.tv_sec, fTimeReceived.tv_usec, lossStats, lastPacketNumReceived, jitter, lastSRTime, diffSR_RRTime);
 ---
 > 
@@ -119,21 +119,21 @@ deps() {
 > 
 > 
 >   va_start(args, diffSR_RRTime);
->   vsnprintf(buffer, sizeof(buffer), "RTCP RR data (received at %lu.%06ld): lossStats 0x%08x, lastPacketNumReceived 0x%08x, jitter 0x%08x, lastSRTime 0x%08x, diffSR_RRTime 0x%08x",
+>   vsnprintf(buffer, sizeof(buffer), \"RTCP RR data (received at %lu.%06ld): lossStats 0x%08x, lastPacketNumReceived 0x%08x, jitter 0x%08x, lastSRTime 0x%08x, diffSR_RRTime 0x%08x\",
 >             fTimeReceived.tv_sec, fTimeReceived.tv_usec, lossStats, lastPacketNumReceived, jitter, lastSRTime, diffSR_RRTime);
 >   va_end(args);
->   snprintf(command, sizeof(command), "logger -p %d \"%s\"", LOG_INFO, buffer);
+>   snprintf(command, sizeof(command), \"logger -p %d \"%s\"\", LOG_INFO, buffer);
 >   system(command);
 > 
 > 
 339,340c351,356
-<   fprintf(stderr, "=> round-trip delay: 0x%04x (== %f seconds)\n", rtd, rtd/65536.0);
+<   fprintf(stderr, \"=> round-trip delay: 0x%04x (== %f seconds)\n\", rtd, rtd/65536.0);
 < #endif
 ---
 >   va_start(args, rtd);
->   vsnprintf(buffer, sizeof(buffer), "=> round-trip delay: 0x%04x (== %f seconds)", rtd, rtd / 65536.0);
+>   vsnprintf(buffer, sizeof(buffer), \"=> round-trip delay: 0x%04x (== %f seconds)\", rtd, rtd / 65536.0);
 >   va_end(args);
->   snprintf(command, sizeof(command), "logger -p %d \"%s\"", LOG_INFO, buffer);
+>   snprintf(command, sizeof(command), \"logger -p %d \"%s\"\", LOG_INFO, buffer);
 >   system(command);
 > }
 " > sink.patch
