@@ -98,7 +98,9 @@ int main(int argc, const char *argv[])
         
         struct timespec timeSinceBoot;
         clock_gettime(CLOCK_MONOTONIC, &timeSinceBoot);
+        LOG_DEBUG(timeSinceBoot.tv_sec);
         timeSinceBoot.tv_sec += 1734736016;
+        LOG_DEBUG(timeSinceBoot.tv_sec);
         
         uint64_t imp_time_base = (static_cast<uint64_t>(timeSinceBoot.tv_sec) * 1000000) + (static_cast<uint64_t>(timeSinceBoot.tv_nsec) / 1000);
         
