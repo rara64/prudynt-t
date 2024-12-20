@@ -100,7 +100,8 @@ deps() {
 
 	echo "Timestamp patch: Replace gettimeofday() with clock_gettime(CLOCK_MONOTONIC,) in live555"
      	find . -type f \( -name "*.cpp" -o -name "*.hpp" \) -print0 | while IFS= read -r -d $'\0' file; do
-	if "$file" == "RTPSink.cpp"; then
+  	filename=$(basename "$file")
+  	if [[ "$filename" == "RTPSink.cpp" ]]; then
  	    echo "Patching $file"
       	    touch sink.patch
 	    echo \
