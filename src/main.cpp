@@ -98,6 +98,7 @@ int main(int argc, const char *argv[])
         
         struct timespec timeSinceBoot;
         clock_gettime(CLOCK_MONOTONIC, &timeSinceBoot);
+        timeSinceBoot.tv_sec += 1734736016;
         
         uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000) + (timeSinceBoot.tv_nsec / 1000);
         IMP_System_RebaseTimeStamp(imp_time_base);
