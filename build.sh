@@ -102,7 +102,7 @@ deps() {
      	find . -type f \( -name "*.cpp" -o -name "*.hpp" \) -print0 | while IFS= read -r -d $'\0' file; do
         if grep -q 'gettimeofday.*NULL);' "$file"; then
             echo "Patching $file"
-            sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_MONOTONIC, \&pruTs);\npruTs.tv_sec += 1734736016\nTIMESPEC_TO_TIMEVAL(\1, \&pruTs);/g' "$file"
+            sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_MONOTONIC, \&pruTs);\npruTs.tv_sec += 1734736016;\nTIMESPEC_TO_TIMEVAL(\1, \&pruTs);/g' "$file"
         fi
     	done
 
