@@ -105,49 +105,13 @@ deps() {
  	    echo "Patching $file"
       	    touch sink.patch
 	    echo \
-"364,369c364
-<   // Compute the round-trip delay that was indicated by the most recently-received
-<   // RTCP RR packet.  Use the method noted in the RTP/RTCP specification (RFC 3350).
-< 
-<   if (fLastSRTime == 0) {
-<     // Either no RTCP RR packet has been received yet, or else the
-<     // reporting receiver has not yet received any RTCP SR packets from us:
+"
+335c335
+< #ifdef DEBUG_RR
 ---
->   if (fLastSRTimeMono.tv_sec == 0 && fLastSRTimeMono.tv_usec == 0) {
-373,379c368,369
-<   // First, convert the time that we received the last RTCP RR packet to NTP format,
-<   // in units of 1/65536 (2^-16) seconds:
-<   unsigned lastReceivedTimeNTP_high
-<     = fTimeReceived.tv_sec + 0x83AA7E80; // 1970 epoch -> 1900 epoch
-<   double fractionalPart = (fTimeReceived.tv_usec*0x0400)/15625.0; // 2^16/10^6
-<   unsigned lastReceivedTimeNTP
-<     = (unsigned)((lastReceivedTimeNTP_high<<16) + fractionalPart + 0.5);
----
->   struct timeval timeReceived_mono = fTimeReceived;
->   struct timeval lastSRTime_mono = fLastSRTimeMono;
-381,387c371,384
-<   int rawResult = lastReceivedTimeNTP - fLastSRTime - fDiffSR_RRTime;
-<   if (rawResult < 0) {
-<     // This can happen if there's clock drift between the sender and receiver,
-<     // and if the round-trip time was very small.
-<     rawResult = 0;
-<   }
-<   return (unsigned)rawResult;
----
->   struct timeval diff;
->   timespec_subtract_timeval(&timeReceived_mono, &lastSRTime_mono, &diff);
->   unsigned rtd_ms = (diff.tv_sec * 1000) + (diff.tv_usec / 1000);
 > 
->   return rtd_ms;
-> }
-> 
-> void timespec_subtract_timeval(struct timeval *result, struct timeval *a, struct timeval *b) {
->     result->tv_sec = a->tv_sec - b->tv_sec;
->     result->tv_usec = a->tv_usec - b->tv_usec;
->     if (result->tv_usec < 0) {
->         result->tv_sec--;
->         result->tv_usec += 1000000;
->     }
+340d339
+< #endif
 " > sink.patch
 	patch "$file" < sink.patch
  	fi
