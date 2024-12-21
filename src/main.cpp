@@ -11,6 +11,8 @@
 #include "globals.hpp"
 #include "IMPSystem.hpp"
 #include "Motion.hpp"
+#define _TIME_BITS 64
+#define _GNU_SOURCE
 #include <time.h>
 using namespace std::chrono;
 
