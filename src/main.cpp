@@ -103,8 +103,9 @@ int main(int argc, const char *argv[])
 
         auto testTime = std::chrono::steady_clock::now();
         auto durationSinceBoot = testTime.time_since_epoch();
-        uint64_t microsecondsSinceBoot = std::chrono::duration_cast<std::chrono::microseconds>(durationSinceBoot);
-        LOG_DEBUG("" << microsecondsSinceBoot);
+        std::chrono::microseconds microsecondsSinceBoot = std::chrono::duration_cast<std::chrono::microseconds>(durationSinceBoot);
+        uint64_t microsecondsSinceBootValue = microsecondsSinceBoot.count();
+        LOG_DEBUG("" << microsecondsSinceBootValue);
         
         LOG_DEBUG("IMP_System_RebaseTimeStamp(" << imp_time_base << ");");
     }
