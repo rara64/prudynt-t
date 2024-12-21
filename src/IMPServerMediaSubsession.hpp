@@ -19,6 +19,9 @@ public:
         H264NALUnit pps,
         int encChn);
 
+    virtual void deleteStream(unsigned clientSessionId, void*& streamToken);
+    virtual void handleCmd_GET_PARAMETER(char const* cseq);
+
 protected:
     // Constructor with VPS as a pointer for optional usage
     IMPServerMediaSubsession(
@@ -56,6 +59,8 @@ private:
     H264NALUnit sps;
     H264NALUnit pps;
     int encChn;
+
+    std::map<unsigned, void*> activeClientSessions; 
 };
 
 #endif
