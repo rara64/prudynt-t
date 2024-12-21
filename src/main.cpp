@@ -11,7 +11,7 @@
 #include "globals.hpp"
 #include "IMPSystem.hpp"
 #include "Motion.hpp"
-#include <sys/time.h>
+#include <time.h>
 using namespace std::chrono;
 
 std::mutex mutex_main;
