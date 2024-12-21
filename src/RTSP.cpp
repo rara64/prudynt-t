@@ -89,7 +89,6 @@ void RTSP::start()
 {
     scheduler = BasicTaskScheduler::createNew();
     env = BasicUsageEnvironment::createNew(*scheduler);
-    unsigned const no_rtsp_session_timeout = 60;
 
     if (cfg->rtsp.auth_required)
     {
@@ -98,12 +97,10 @@ void RTSP::start()
             cfg->rtsp.username,
             cfg->rtsp.password);
         rtspServer = RTSPServer::createNew(*env, cfg->rtsp.port, auth, 10);
-        rtspServer->setRTSPSessionTimeout(no_rtsp_session_timeout);
     }
     else
     {
         rtspServer = RTSPServer::createNew(*env, cfg->rtsp.port, nullptr, 10);
-        rtspServer->setRTSPSessionTimeout(no_rtsp_session_timeout);
     }
     if (rtspServer == NULL)
     {
