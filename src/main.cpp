@@ -95,17 +95,11 @@ int main(int argc, const char *argv[])
         imp_system = IMPSystem::createNew();
 
         // Set base for IMP once
-        
         struct timespec timeSinceBoot;
         clock_gettime(CLOCK_MONOTONIC, &timeSinceBoot);
-        timeSinceBoot.tv_sec += 1734736016;
-        uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000ull) + (timeSinceBoot.tv_nsec / 1000);
-
-        auto testTime = std::chrono::steady_clock::now();
-        auto durationSinceBoot = testTime.time_since_epoch();
-        std::chrono::microseconds microsecondsSinceBoot = std::chrono::duration_cast<std::chrono::microseconds>(durationSinceBoot);
-        uint64_t microsecondsSinceBootValue = microsecondsSinceBoot.count();
-        LOG_DEBUG("" << microsecondsSinceBootValue);
+        
+        uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000) + (timeSinceBoot.tv_nsec / 1000);
+        IMP_System_RebaseTimeStamp(imp_time_base);
         
         LOG_DEBUG("IMP_System_RebaseTimeStamp(" << imp_time_base << ");");
     }
