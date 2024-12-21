@@ -100,6 +100,11 @@ int main(int argc, const char *argv[])
         clock_gettime(CLOCK_MONOTONIC, &timeSinceBoot);
         timeSinceBoot.tv_sec += 1734736016;
         uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000ull) + (timeSinceBoot.tv_nsec / 1000);
+
+        auto timeSinceBoot = std::chrono::steady_clock::now();
+        auto durationSinceBoot = timeSinceBoot.time_since_epoch();
+        auto microsecondsSinceBoot = std::chrono::duration_cast<std::chrono::microseconds>(durationSinceBoot);
+        LOG_DEBUG("" << microsecondsSinceBoot);
         
         LOG_DEBUG("IMP_System_RebaseTimeStamp(" << imp_time_base << ");");
     }
