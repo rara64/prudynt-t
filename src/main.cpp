@@ -99,7 +99,7 @@ int main(int argc, const char *argv[])
         // Set base for IMP once
         
         struct timespec timeSinceBoot;
-        clock_gettime64(CLOCK_MONOTONIC, &timeSinceBoot);
+        clock_gettime(CLOCK_MONOTONIC, &timeSinceBoot);
         timeSinceBoot.tv_sec += 1734736016;
         uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000ull) + (timeSinceBoot.tv_nsec / 1000);
         
