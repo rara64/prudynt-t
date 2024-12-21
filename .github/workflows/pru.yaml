@@ -14,30 +14,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - target: T10
-            build_type: static
-          - target: T20
-            build_type: static
-          - target: T21
-            build_type: static
-          - target: T23
-            build_type: static
-          - target: T30
-            build_type: static
           - target: T31
             build_type: static
-          - target: T10
-            build_type: dynamic
-          - target: T20
-            build_type: dynamic
-          - target: T21
-            build_type: dynamic
-          - target: T23
-            build_type: dynamic
-          - target: T30
-            build_type: dynamic
-          - target: T31
-            build_type: dynamic
 
     steps:
       - name: Checkout source
