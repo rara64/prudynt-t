@@ -97,15 +97,9 @@ int main(int argc, const char *argv[])
         // Set base for IMP once
         
         struct timespec timeSinceBoot;
-        clock_gettime(CLOCK_MONOTONIC, &timeSinceBoot);
-        timeSinceBoot.tv_sec += 1734736016ull;
-
-        LOG_DEBUG("" << timeSinceBoot.tv_sec);
-        LOG_DEBUG("" << (timeSinceBoot.tv_sec * 1000000ull));
-        LOG_DEBUG("" << (static_cast<uint64_t>(timeSinceBoot.tv_sec) * 1000000ull));
-        uint64_t tsu = static_cast<uint64_t>(timeSinceBoot.tv_sec);
-        LOG_DEBUG("" << tsu);
-        uint64_t imp_time_base = (tsu * 1000000ull) + (timeSinceBoot.tv_nsec / 1000);
+        clock_gettime64(CLOCK_MONOTONIC, &timeSinceBoot);
+        timeSinceBoot.tv_sec += 1734736016;
+        uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000ull) + (timeSinceBoot.tv_nsec / 1000);
         
         LOG_DEBUG("IMP_System_RebaseTimeStamp(" << imp_time_base << ");");
     }
