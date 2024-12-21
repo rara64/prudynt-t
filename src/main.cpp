@@ -96,7 +96,7 @@ int main(int argc, const char *argv[])
 
         // Set base for IMP once
         struct timespec timeSinceBoot;
-        clock_gettime(CLOCK_MONOTONIC, &timeSinceBoot);
+        clock_gettime(CLOCK_REALTIME, &timeSinceBoot);
         
         uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000) + (timeSinceBoot.tv_nsec / 1000);
         IMP_System_RebaseTimeStamp(imp_time_base);
