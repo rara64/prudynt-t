@@ -104,6 +104,11 @@ deps() {
             echo "Patching $file"
             sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_REALTIME, \&pruTs);\nTIMESPEC_TO_TIMEVAL(\1, \&pruTs);/g' "$file"
         fi
+	if [[ $(basename "$file") == "RTSPServer.cpp" ]]; then
+ 	   echo "ADDING DEBUG $file"
+	   sed -i '1i#define DEBUG 1\n' "$file"
+    	   cat "$file" | head -n 10
+ 	fi
     	done
 
 	if [[ -f Makefile ]]; then
