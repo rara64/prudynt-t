@@ -115,10 +115,6 @@ deps() {
     	sed -i '/if (fOurServer.fReclamationSeconds > 0) {/a \
         fprintf(stderr, \"Rescheduled timeout task\");' "$file"
     	fi
-  	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
-     sed -i "/void DelayQueue::synchronize() {/a \
-        usleep(10000);" "$file"
-	fi
     	done
 
 	if [[ -f Makefile ]]; then
