@@ -116,7 +116,6 @@ deps() {
         fprintf(stderr, \"Rescheduled timeout task\");' "$file"
     	fi
   	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
-		sed -i '1s/^/#include <usleep>\n/' "$file"
      sed -i "/void DelayQueue::synchronize() {/a \
         usleep(10000);" "$file"
 	fi
