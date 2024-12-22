@@ -115,7 +115,6 @@ sed -i '1s/^/#include <cstdio>\n/' "$file"
 sed -i "/_EventTime timeNow = TimeNow();/a \
         fprintf(stderr, \"[sync] timeNow: %ld.%06ld\\n\", timeNow.tv_sec, timeNow.tv_usec);" "$file"
 
-
 sed -i "/if (timeNow < fLastSyncTime) {/a \
             fprintf(stderr, \"[sync] WARNING: System clock went back in time!\\n\");" "$file"
 
@@ -123,15 +122,15 @@ sed -i "/fLastSyncTime = timeNow;/a \
         fprintf(stderr, \"[sync] fLastSyncTime: %ld.%06ld, timeSinceLastSync: %ld.%06ld\\n\", \\\
                 fLastSyncTime.tv_sec, fLastSyncTime.tv_usec, \\\
                 timeSinceLastSync.tv_sec, timeSinceLastSync.tv_usec);" "$file"
-
+		
 sed -i "/DelayQueueEntry\* curEntry = head();/a \
         int entryIndex = 0;" "$file"
 
 sed -i "/while (.*timeSinceLastSync >= curEntry->fDeltaTimeRemaining)/a \
             fprintf(stderr, \"[sync] Entry %d: fDeltaTimeRemaining: %ld.%06ld\\n\", \\\
-                    entryIndex, curEntry->fDeltaTimeRemaining.tv_sec, curEntry->fDeltaTimeRemaining.tv_usec);\
+                    entryIndex, curEntry->fDeltaTimeRemaining.tv_sec, curEntry->fDeltaTimeRemaining.tv_usec);\\\
             fprintf(stderr, \"[sync] TRIGGERING TASK for entry %d\\n\", entryIndex);" "$file"
-	    
+
 sed -i "/curEntry = curEntry->fNext;/a \
             entryIndex++;" "$file"
 
