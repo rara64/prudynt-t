@@ -109,6 +109,10 @@ deps() {
  	   echo "ADDING DEBUG $file"
 	   sed -i '1i#define DEBUG 1\n' "$file"
  	fi
+    	if [[ $(basename "$file") == "GenericMediaServer.cpp" ]]; then
+ 	   echo "ADDING DEBUG $file"
+	   sed -i '1i#define DEBUG 1\n' "$file"
+    	fi
   	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
 sed -i '1s/^/#include <cstdio>\n/' "$file"
 
