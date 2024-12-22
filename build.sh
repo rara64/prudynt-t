@@ -117,15 +117,10 @@ deps() {
     	fi
   	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
 	    sed -i '1s/^/#include <cstdio>\n/' "$file"
-     
-sed -i '/if ((int)usecs < 0) {/i \
-        fprintf(stderr, \"[DEBUG] Timeval-: arg1: %ld.%06ld, arg2: %ld.%06ld, result before borrow: %ld.%06ld\\n\", \\\
-                arg1.seconds(), arg1.useconds(), arg2.seconds(), arg2.useconds(), secs, usecs);' "$file"
-
-sed -i '/if ((int)secs < 0)/i \
-        fprintf(stderr, \"[DEBUG] Timeval-: result after borrow: %ld.%06ld\\n\", secs, usecs);' "$file"
-
- 	    cat "$file" | grep 'result after borrow'
+	    sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a \
+        if (timeSinceLastSync.tv_sec == 0 && timeSinceLastSync.tv_usec < 1000) { // Less than 1ms\
+            usleep(500);\
+        }' "$file"
 	fi
     	done
 
