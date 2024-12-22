@@ -131,7 +131,7 @@ sed -i "/while (.*timeSinceLastSync >= curEntry->fDeltaTimeRemaining)/a \
 sed -i "/curEntry = curEntry->fNext;/a \
         entryIndex++;" "$file"
 
-sed -i "/curEntry->fDeltaTimeRemaining -= timeSinceLastSync;/a \
+sed -i "/if (curEntry != NULL) {/a \
         fprintf(stderr, \"[sync] Entry %d: fDeltaTimeRemaining after adjustment: %ld.%06ld\\n\", entryIndex, curEntry->fDeltaTimeRemaining.tv_sec, curEntry->fDeltaTimeRemaining.tv_usec);" "$file"
 
  cat "$file"
