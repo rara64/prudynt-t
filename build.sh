@@ -102,7 +102,7 @@ deps() {
      	find . -type f \( -name "*.cpp" -o -name "*.hpp" \) -print0 | while IFS= read -r -d $'\0' file; do
         if grep -q 'gettimeofday.*NULL);' "$file"; then
             echo "Patching $file"
-            sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_BOOTTIME, \&pruTs);\n\1.tv_sec = pruTs.tv_sec;\n\1tv.usec = pruTs.tv_nsec \/ 1000;/g' "$file"
+            sed -i 's/gettimeofday(\([&^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_BOOTTIME, \&pruTs);\n\1.tv_sec = pruTs.tv_sec;\n\1tv.usec = pruTs.tv_nsec \/ 1000;/g' "$file"
 	    cat "$file" | grep "clock_gettime(" -B 5 -A 5
         fi
 	if [[ $(basename "$file") == "RTSPServer.cpp" ]]; then
