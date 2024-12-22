@@ -111,11 +111,11 @@ deps() {
  	fi
   	if [[ $(basename "$file") == "GenericMediaServer.cpp" ]]; then
  	   echo "ADDING DEBUG $file"
-     	   sed -i '/#ifdef DEBUG/a\
-    struct timespec ts; \
-    clock_gettime(CLOCK_MONOTONIC, &ts); \
+	   sed -i '/#ifdef DEBUG/a\
+    struct timespec ts;\
+    clock_gettime(CLOCK_MONOTONIC, &ts);\
     double current_time = ts.tv_sec + ts.tv_nsec / 1e9;' \
-    -e '/fprintf(stderr/ s/\\n/ at time %.3f seconds\\n", current_time/' "$file"
+-e '/fprintf(stderr/ s/\\n/ at time %.3f seconds\\n", current_time/' "$file"
 	   sed -i '1i#define DEBUG 1\n' "$file"
     	   cat "$file" | head -n 10
    	fi
