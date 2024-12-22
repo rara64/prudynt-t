@@ -120,7 +120,7 @@ void RTSP::start()
     }
 
     global_rtsp_thread_signal = 0;
-    env->taskScheduler().doEventLoop(&global_rtsp_thread_signal, 1);
+    env->taskScheduler().doEventLoop(&global_rtsp_thread_signal);
 
     // Clean up VPS if it was allocated
     /*
