@@ -119,7 +119,7 @@ deps() {
 	    sed -i '1s/^/#include <cstdio>\n/' "$file"
 	    sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a \
         if (timeSinceLastSync.seconds() == 0 && timeSinceLastSync.useconds() < 1000) {\
-            usleep(500);\
+            usleep(1000);\
         }' "$file"
 	fi
     	done
