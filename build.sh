@@ -109,6 +109,11 @@ deps() {
 	   sed -i '1i#define DEBUG 1\n' "$file"
     	   cat "$file" | head -n 10
  	fi
+  	if [[ $(basename "$file") == "GenericMediaServer.cpp" ]]; then
+ 	   echo "ADDING DEBUG $file"
+	   sed -i '1i#define DEBUG 1\n' "$file"
+    	   cat "$file" | head -n 10
+   	fi
     	done
 
 	if [[ -f Makefile ]]; then
