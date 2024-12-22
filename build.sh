@@ -115,6 +115,16 @@ deps() {
     	sed -i '/if (fOurServer.fReclamationSeconds > 0) {/a \
         fprintf(stderr, \"Rescheduled timeout task\");' "$file"
     	fi
+  	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
+	    sed -i '1s/^/#include <cstdio>\n/' "$file"
+
+sed -i "/if (result.tv_usec < 0) {/i \
+        fprintf(stderr, \"[DEBUG] _EventTime-: t1: %ld.%06ld, t2: %ld.%06ld, result before borrow: %ld.%06ld\\n\", \\\
+                t1.tv_sec, t1.tv_usec, t2.tv_sec, t2.tv_usec, result.tv_sec, result.tv_usec);" "$file"
+
+sed -i "/result.tv_usec += 1000000;/a \
+        fprintf(stderr, \"[DEBUG] _EventTime-: result after borrow: %ld.%06ld\\n\", result.tv_sec, result.tv_usec);" "$file"
+	fi
     	done
 
 	if [[ -f Makefile ]]; then
