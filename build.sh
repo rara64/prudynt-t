@@ -102,7 +102,7 @@ deps() {
      	find . -type f \( -name "*.cpp" -o -name "*.hpp" \) -print0 | while IFS= read -r -d $'\0' file; do
         if grep -q 'gettimeofday.*NULL);' "$file"; then
             echo "Patching $file"
-            sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_MONOTONIC, \&pruTs);\nTIMESPEC_TO_TIMEVAL(\1, \&pruTs);/g' "$file"
+            sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_BOOTTIME, \&pruTs);\nTIMESPEC_TO_TIMEVAL(\1, \&pruTs);/g' "$file"
 	    cat "$file" | grep "clock_gettime(" -B 5 -A 5
         fi
 	if [[ $(basename "$file") == "RTSPServer.cpp" ]]; then
@@ -115,13 +115,6 @@ deps() {
     	sed -i '/if (fOurServer.fReclamationSeconds > 0) {/a \
         fprintf(stderr, \"Rescheduled timeout task\");' "$file"
     	fi
-  	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
-	    sed -i '1s/^/#include <cstdio>\n/' "$file"
-	    sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a \
-        if (timeSinceLastSync.seconds() == 0 && timeSinceLastSync.useconds() < 1000) {\
-            usleep(1000);\
-        }' "$file"
-	fi
     	done
 
 	if [[ -f Makefile ]]; then
