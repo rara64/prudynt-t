@@ -113,26 +113,26 @@ deps() {
 sed -i '1s/^/#include <cstdio>\n/' "$file"
 
 sed -i '/_EventTime timeNow = TimeNow();/a \
-        fprintf(stderr, \"[sync] timeNow: %ld.%06ld\\n\", timeNow.secondsSinceEpoch, timeNow.usecondsSinceEpoch);' "$file"
+        fprintf(stderr, \"[sync] timeNow: %ld.%06ld\\n\", timeNow.seconds, timeNow.useconds);' "$file"
 
 sed -i '/if \(timeNow < fLastSyncTime\) {/a \
         fprintf(stderr, \"[sync] WARNING: System clock went back in time!\\n\");' "$file"
 
 sed -i '/fLastSyncTime = timeNow;/a \
-        fprintf(stderr, \"[sync] fLastSyncTime: %ld.%06ld, timeSinceLastSync: %ld.%06ld\\n\", fLastSyncTime.secondsSinceEpoch, fLastSyncTime.usecondsSinceEpoch, timeSinceLastSync.secondsSinceEpoch, timeSinceLastSync.usecondsSinceEpoch);' "$file"
+        fprintf(stderr, \"[sync] fLastSyncTime: %ld.%06ld, timeSinceLastSync: %ld.%06ld\\n\", fLastSyncTime.seconds, fLastSyncTime.useconds, timeSinceLastSync.seconds, timeSinceLastSync.useconds);' "$file"
 
 sed -i '/DelayQueueEntry\* curEntry = head();/a \
         int entryIndex = 0;' "$file"
 
 sed -i '/while (.*timeSinceLastSync >= curEntry->fDeltaTimeRemaining)/a \
-        fprintf(stderr, \"[sync] Entry %d: fDeltaTimeRemaining: %ld.%06ld\\n\", entryIndex, curEntry->fDeltaTimeRemaining.secondsSinceEpoch, curEntry->fDeltaTimeRemaining.usecondsSinceEpoch);\\\
+        fprintf(stderr, \"[sync] Entry %d: fDeltaTimeRemaining: %ld.%06ld\\n\", entryIndex, curEntry->fDeltaTimeRemaining.seconds, curEntry->fDeltaTimeRemaining.useconds);\\\
         fprintf(stderr, \"[sync] TRIGGERING TASK for entry %d\\n\", entryIndex);' "$file"
 
 sed -i '/curEntry = curEntry->fNext;/a \
         entryIndex++;' "$file"
 
 sed -i '/if (curEntry != NULL) {/a \
-        fprintf(stderr, \"[sync] Entry %d: fDeltaTimeRemaining after adjustment: %ld.%06ld\\n\", entryIndex, curEntry->fDeltaTimeRemaining.secondsSinceEpoch, curEntry->fDeltaTimeRemaining.usecondsSinceEpoch);' "$file"
+        fprintf(stderr, \"[sync] Entry %d: fDeltaTimeRemaining after adjustment: %ld.%06ld\\n\", entryIndex, curEntry->fDeltaTimeRemaining.seconds, curEntry->fDeltaTimeRemaining.useconds);' "$file"
 
  cat "$file"
       
