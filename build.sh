@@ -116,6 +116,7 @@ struct timespec ts; \\\
 clock_gettime(CLOCK_MONOTONIC, &ts); \\\
 double current_time = ts.tv_sec + ts.tv_nsec \* 1e-9; \\\
 fprintf(stderr, "Current time: %.3f seconds\\n", current_time);' "$file"
+sed -i 's/if (fOurServer\.fReclamationSeconds > 0) {/if (fOurServer.fReclamationSeconds > 0) {\n\t\tfprintf(stderr, "ReclamationSeconds: %d\\n", fOurServer.fReclamationSeconds * 1000000);/g' "$file"
 	   sed -i '1i#define DEBUG 1\n' "$file"
     	   cat "$file" | head -n 10
    	fi
