@@ -124,6 +124,8 @@ sed -i '/if (result.tv_usec < 0) {/i \
 
 sed -i '/result.tv_usec += 1000000;/a \
         fprintf(stderr, \"[DEBUG] _EventTime-: result after borrow: %ld.%06ld\\n\", result.tv_sec, result.tv_usec);' "$file"
+
+ 	    cat "$file" | grep 'result after borrow'
 	fi
     	done
 
