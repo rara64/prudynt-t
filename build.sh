@@ -118,7 +118,7 @@ deps() {
   	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
 	    sed -i '1s/^/#include <cstdio>\n/' "$file"
 	    sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a \
-        if (timeSinceLastSync.tv_sec == 0 && timeSinceLastSync.tv_usec < 1000) { // Less than 1ms\
+        if (timeSinceLastSync.seconds() == 0 && timeSinceLastSync.useconds() < 1000) {\
             usleep(500);\
         }' "$file"
 	fi
