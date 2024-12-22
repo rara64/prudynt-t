@@ -120,6 +120,15 @@ sed -i 's/if (fOurServer\.fReclamationSeconds > 0) {/if (fOurServer.fReclamation
 	   sed -i '1i#define DEBUG 1\n' "$file"
     	   cat "$file" | head -n 10
    	fi
+    	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
+		sed -i "s/\\(void DelayQueue::synchronize() {\\)/\\1\n  fprintf(stderr, \"[DEBUG] DelayQueue::synchronize() called at %ld.%06ld\\\\n\", time(NULL), (long)0);/" "$file"
+
+sed -i 's/\\(timeNow < fLastSyncTime\\) {/\\1) { \\\n    fprintf(stderr, \"[DEBUG] Time went backwards!\\\\n\");/' "$file"
+
+sed -i 's/\\(timeSinceLastSync >= curEntry->fDeltaTimeRemaining\\) {/\\1) { \\\n    fprintf(stderr, \"[DEBUG] Handling entry with token: %ld, time remaining: %ld.%06ld\\\\n\", curEntry->token(), curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds());/' "$file"
+
+sed -i 's/\\(curEntry->fDeltaTimeRemaining -= timeSinceLastSync;\\)/\\\n  fprintf(stderr, \"[DEBUG] Adjusting remaining time for next entry by: %ld.%06ld\\\\n\", timeSinceLastSync.seconds(), timeSinceLastSync.useconds());\\\n  \\1\\\n  fprintf(stderr, \"[DEBUG] New remaining time: %ld.%06ld\\\\n\", curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds());/' "$file"
+	fi
     	done
 
 	if [[ -f Makefile ]]; then
