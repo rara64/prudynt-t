@@ -105,6 +105,10 @@ deps() {
             sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_MONOTONIC, \&pruTs);\nTIMESPEC_TO_TIMEVAL(\1, \&pruTs);/g' "$file"
 	    cat "$file" | grep "clock_gettime(" -B 5 -A 5
         fi
+	if [[ $(basename "$file") == "RTSPServer.cpp" ]]; then
+ 	   echo "ADDING DEBUG $file"
+	   sed -i '1i#define DEBUG 1\n' "$file"
+ 	fi
     	done
 
 	if [[ -f Makefile ]]; then
