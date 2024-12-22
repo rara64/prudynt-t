@@ -121,6 +121,7 @@ sed -i 's/if (fOurServer\.fReclamationSeconds > 0) {/if (fOurServer.fReclamation
     	   cat "$file" | head -n 10
    	fi
     	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
+     sed -i '1s/^/#include <cstdio>\n/' "$file"
 		sed -i "s/\\(void DelayQueue::synchronize() {\\)/\\1\n  fprintf(stderr, \"[DEBUG] DelayQueue::synchronize() called at %ld.%06ld\\\\n\", time(NULL), (long)0);/" "$file"
 
 sed -i 's/\\(timeNow < fLastSyncTime\\) {/\\1) { \\\n    fprintf(stderr, \"[DEBUG] Time went backwards!\\\\n\");/' "$file"
