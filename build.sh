@@ -119,6 +119,7 @@ deps() {
 		sed -i '1s/^/#include <usleep>\n/' "$file"
      sed -i "/void DelayQueue::synchronize() {/a \
         usleep(10000);" "$file"
+	fi
     	done
 
 	if [[ -f Makefile ]]; then
