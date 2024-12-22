@@ -101,38 +101,10 @@ deps() {
 	echo "Timestamp patch: Replace gettimeofday() with clock_gettime(CLOCK_MONOTONIC,) in live555"
      	find . -type f \( -name "*.cpp" -o -name "*.hpp" \) -print0 | while IFS= read -r -d $'\0' file; do
         if grep -q 'gettimeofday.*NULL);' "$file"; then
-	    if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
-     		continue
-     	    fi
             echo "Patching $file"
             sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_MONOTONIC, \&pruTs);\nTIMESPEC_TO_TIMEVAL(\1, \&pruTs);/g' "$file"
 	    cat "$file" | grep "clock_gettime(" -B 5 -A 5
         fi
-	if [[ $(basename "$file") == "RTSPServer.cpp" ]]; then
- 	   echo "ADDING DEBUG $file"
-	   sed -i '1i#define DEBUG 1\n' "$file"
- 	fi
-  	if [[ $(basename "$file") == "GenericMediaServer.cpp" ]]; then
- 	   echo "ADDING DEBUG $file"
-sed -i '/#ifdef[[:space:]]*DEBUG/a \
-struct timespec ts; \\\
-clock_gettime(CLOCK_MONOTONIC, &ts); \\\
-double current_time = ts.tv_sec + ts.tv_nsec \* 1e-9; \\\
-fprintf(stderr, "Current time: %.3f seconds\\n", current_time);' "$file"
-sed -i 's/if (fOurServer\.fReclamationSeconds > 0) {/if (fOurServer.fReclamationSeconds > 0) {\n\t\tfprintf(stderr, "ReclamationSeconds: %d\\n", fOurServer.fReclamationSeconds * 1000000);/g' "$file"
-	   sed -i '1i#define DEBUG 1\n' "$file"
-    	   cat "$file" | head -n 10
-   	fi
-    	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
-     sed -i '1s/^/#include <cstdio>\n/' "$file"
-		sed -i "s/\\(void DelayQueue::synchronize() {\\)/\\1\n  fprintf(stderr, \"[DEBUG] DelayQueue::synchronize() called at %ld.%06ld\\\\n\", time(NULL), (long)0);/" "$file"
-
-sed -i 's/\\(timeNow < fLastSyncTime\\) {/\\1) { \\\n    fprintf(stderr, \"[DEBUG] Time went backwards!\\\\n\");/' "$file"
-
-sed -i 's/\\(timeSinceLastSync >= curEntry->fDeltaTimeRemaining\\) {/\\1) { \\\n    fprintf(stderr, \"[DEBUG] Handling entry with token: %ld, time remaining: %ld.%06ld\\\\n\", curEntry->token(), curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds());/' "$file"
-
-sed -i 's/\\(curEntry->fDeltaTimeRemaining -= timeSinceLastSync;\\)/\\\n  fprintf(stderr, \"[DEBUG] Adjusting remaining time for next entry by: %ld.%06ld\\\\n\", timeSinceLastSync.seconds(), timeSinceLastSync.useconds());\\\n  \\1\\\n  fprintf(stderr, \"[DEBUG] New remaining time: %ld.%06ld\\\\n\", curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds());/' "$file"
-	fi
     	done
 
 	if [[ -f Makefile ]]; then
