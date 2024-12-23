@@ -96,11 +96,11 @@ void RTSP::start()
         auth->addUserRecord(
             cfg->rtsp.username,
             cfg->rtsp.password);
-        rtspServer = RTSPServer::createNew(*env, cfg->rtsp.port, auth, 60);
+        rtspServer = RTSPServer::createNew(*env, cfg->rtsp.port, auth);
     }
     else
     {
-        rtspServer = RTSPServer::createNew(*env, cfg->rtsp.port, nullptr, 60);
+        rtspServer = RTSPServer::createNew(*env, cfg->rtsp.port, nullptr);
     }
     if (rtspServer == NULL)
     {
