@@ -116,7 +116,13 @@ deps() {
     	fi
      	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
    	   #sed -i '1s/^/#include <cstdio>\n/' "$file"
-	   sed -i '/\(\s*\)\(while (timeSinceLastSync >= curEntry->fDeltaTimeRemaining) {\)/{s//\1_EventTime timeToProcess = timeSinceLastSync;\1\2 curEntry != nullptr && timeToProcess >= curEntry->fDeltaTimeRemaining)/;}; /\(.*\)\(timeSinceLastSync -\)/\1timeToProcess -/; /curEntry->fDeltaTimeRemaining -= timeSinceLastSync/s//\1timeToProcess/' "$file"
+	   sed -i '/\(\s*\)\(while (timeSinceLastSync >= curEntry->fDeltaTimeRemaining) {\)/{
+  s//\1_EventTime timeToProcess = timeSinceLastSync;\n\1\2 curEntry != nullptr && timeToProcess >= curEntry->fDeltaTimeRemaining)/
+  N
+  s/timeSinceLastSync/timeToProcess/g
+  s/\(curEntry->fDeltaTimeRemaining \)\(.*\)/\1= DELAY_ZERO/
+  }' "$file"
+  	cat "$file"
    	fi
     	done
 
