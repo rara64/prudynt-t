@@ -116,12 +116,12 @@ deps() {
     	fi
      	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
    	   sed -i '1s/^/#include <cstdio>\n/' "$file"
-           sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a fprintf(stderr, "[sync] timeSinceLastSync: %ld.%06ld\\n", timeSinceLastSync.seconds(), timeSinceLastSync.useconds());' "$file"
+sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a fprintf(stderr, "[sync] timeSinceLastSync: %ld.%06ld\\n", timeSinceLastSync.seconds(), timeSinceLastSync.useconds());' "$file"
 sed -i '/DelayQueueEntry\* curEntry = head();/a fprintf(stderr, "[sync] curEntry fDeltaTimeRemaining before sync: %ld.%06ld, fToken: %d\\n", curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds(), curEntry->fToken);' "$file"
 sed -i '/curEntry->fDeltaTimeRemaining = DELAY_ZERO;/a fprintf(stderr, "[sync] curEntry fired: fToken: %d\\n", curEntry->fToken);' "$file"
 sed -i '/curEntry->fDeltaTimeRemaining -= timeSinceLastSync;/a fprintf(stderr, "[sync] curEntry remaining: %ld.%06ld, fToken: %d\\n", curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds(), curEntry->fToken);' "$file"
 sed -i '/if (timeNow < fLastSyncTime)/a fprintf(stderr, "[sync] Clock went backwards: resetting fLastSyncTime.\\n");' "$file"
-sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a if (timeSinceLastSync < 0) { fprintf(stderr, "[sync] Negative time delta: %ld.%06ld\\n", timeSinceLastSync.seconds(), timeSinceLastSync.useconds()); return; }' "$file"
+sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a if (timeSinceLastSync.seconds() < 0 || (timeSinceLastSync.seconds() == 0 && timeSinceLastSync.useconds() < 0)) { fprintf(stderr, "[sync] Negative time delta: %ld.%06ld\\n", timeSinceLastSync.seconds(), timeSinceLastSync.useconds()); return; }' "$file"
 
    	fi
     	done
