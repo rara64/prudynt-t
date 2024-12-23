@@ -116,8 +116,7 @@ deps() {
     	fi
      	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
    	   sed -i '1s/^/#include <cstdio>\n/' "$file"
-    sed -i '/curEntry->fDeltaTimeRemaining -= timeSinceLastSync;/a \
-    fprintf(stderr, "[sync] fDeltaTimeRemaining: %ld.%06ld\\n", curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds());' "$file"
+    sed -i '/curEntry->fDeltaTimeRemaining -= timeSinceLastSync;/a fprintf(stderr, "[sync] fDeltaTimeRemaining: %ld.%06ld\\n", curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds());' "$file"
     grep '[sync] fDeltaTimeRemaining' "$file" -A 5 -B 5
    	fi
     	done
