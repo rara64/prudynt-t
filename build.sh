@@ -112,8 +112,7 @@ deps() {
     	if [[ $(basename "$file") == "GenericMediaServer.cpp" ]]; then
  	   echo "ADDING DEBUG $file"
 	   sed -i '1i#define DEBUG 1\n' "$file"
-    	sed -i '/if (fOurServer.fReclamationSeconds > 0) {/a \
-        fprintf(stderr, \"Rescheduled timeout task\");' "$file"
+	sed -i "s/\(fOurServer.fReclamationSeconds\)\(\*1000000\)/\1*2000000/" "$file"
     	fi
     	done
 
