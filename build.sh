@@ -116,20 +116,13 @@ deps() {
     	fi
      	if [[ $(basename "$file") == "DelayQueue.cpp" ]]; then
    	   sed -i '1s/^/#include <cstdio>\n/' "$file"
-sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a time_t currentTime = time(NULL);' "$file"
-sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a fprintf(stderr, "[sync] [%ld] timeSinceLastSync: %ld.%06ld\\n", currentTime, timeSinceLastSync.seconds(), timeSinceLastSync.useconds());' "$file"
-
-sed -i '/DelayQueueEntry\* curEntry = head();/a time_t currentTime = time(NULL);' "$file"
-sed -i '/DelayQueueEntry\* curEntry = head();/a fprintf(stderr, "[sync] [%ld] curEntry fDeltaTimeRemaining before sync: %ld.%06ld, fToken: %d\\n", currentTime, curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds(), curEntry->fToken);' "$file"
-
-sed -i '/curEntry->fDeltaTimeRemaining = DELAY_ZERO;/a fprintf(stderr, "[sync] [%ld] curEntry fired: fToken: %d\\n", currentTime, curEntry->fToken);' "$file"
-
-sed -i '/curEntry->fDeltaTimeRemaining -= timeSinceLastSync;/a fprintf(stderr, "[sync] [%ld] curEntry remaining: %ld.%06ld, fToken: %d\\n", currentTime, curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds(), curEntry->fToken);' "$file"
-
+sed -i '/_EventTime timeNow = TimeNow();/i time_t currentTime = time(NULL);' "$file"
 sed -i '/if (timeNow < fLastSyncTime)/a fprintf(stderr, "[sync] [%ld] Clock went backwards: resetting fLastSyncTime.\\n", currentTime);' "$file"
-
-sed -i '/DelayInterval timeSinceLastSync = timeNow - fLastSyncTime;/a if (timeSinceLastSync.seconds() < 0 || (timeSinceLastSync.seconds() == 0 && timeSinceLastSync.useconds() < 0)) { fprintf(stderr, "[sync] [%ld] Negative time delta: %ld.%06ld\\n", currentTime, timeSinceLastSync.seconds(), timeSinceLastSync.useconds()); return; }' "$file"
-
+sed -i '/if (timeSinceLastSync.seconds() < 0 || (timeSinceLastSync.seconds() == 0 && timeSinceLastSync.useconds() < 0)) {/a fprintf(stderr, "[sync] [%ld] Negative time delta: %ld.%06ld\\n", currentTime, timeSinceLastSync.seconds(), timeSinceLastSync.useconds()); return;' "$file"
+sed -i '/fprintf(stderr, "[sync] timeSinceLastSync:/a fprintf(stderr, "[sync] [%ld] timeSinceLastSync: %ld.%06ld\\n", currentTime, timeSinceLastSync.seconds(), timeSinceLastSync.useconds());' "$file"
+sed -i '/DelayQueueEntry\* curEntry = head();/a fprintf(stderr, "[sync] [%ld] curEntry fDeltaTimeRemaining before sync: %ld.%06ld, fToken: %d\\n", currentTime, curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds(), curEntry->fToken);' "$file"
+sed -i '/curEntry->fDeltaTimeRemaining = DELAY_ZERO;/a fprintf(stderr, "[sync] [%ld] curEntry fired: fToken: %d\\n", currentTime, curEntry->fToken);' "$file"
+sed -i '/curEntry->fDeltaTimeRemaining -= timeSinceLastSync;/a fprintf(stderr, "[sync] [%ld] curEntry remaining: %ld.%06ld, fToken: %d\\n", currentTime, curEntry->fDeltaTimeRemaining.seconds(), curEntry->fDeltaTimeRemaining.useconds(), curEntry->fToken);' "$file"
    	fi
     	done
 
