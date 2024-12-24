@@ -99,10 +99,15 @@ int main(int argc, const char *argv[])
         //clock_gettime(CLOCK_MONOTONIC, &timeSinceBoot);
         struct timeval imp_time_base;
         gettimeofday(&imp_time_base, NULL);
-        uint64_t time_base = (imp_time_base.tv_sec * (uint64_t)1000000);
+        uint64_t time_base = ((uint64_t)imp_time_base.tv_sec * (uint64_t)1000000);
         //uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000) + (timeSinceBoot.tv_nsec / 1000);
         IMP_System_RebaseTimeStamp(time_base);
-        LOG_DEBUG("" << sizeof(time_t));
+        LOG_DEBUG("sizeof(time_t) => " << sizeof(time_t));
+        struct timeval tv;
+        if (gettimeofday(&tv, NULL) == 0) {
+            LOG_DEBUG("Seconds: %ld\n", tv.tv_sec);
+            LOG_DEBUG("Microseconds: %ld\n", tv.tv_usec);
+        }
         LOG_DEBUG("IMP_System_RebaseTimeStamp(" << time_base << ");");
     }
 
