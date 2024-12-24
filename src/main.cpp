@@ -105,8 +105,8 @@ int main(int argc, const char *argv[])
         LOG_DEBUG("sizeof(time_t) => " << sizeof(time_t));
         struct timeval tv;
         if (gettimeofday(&tv, NULL) == 0) {
-            LOG_DEBUG("Seconds: %ld\n", tv.tv_sec);
-            LOG_DEBUG("Microseconds: %ld\n", tv.tv_usec);
+            LOG_DEBUG("Seconds: " << tv.tv_sec);
+            LOG_DEBUG("Microseconds: " << tv.tv_usec);
         }
         LOG_DEBUG("IMP_System_RebaseTimeStamp(" << time_base << ");");
     }
