@@ -98,13 +98,13 @@ deps() {
 	tar xf live555-latest.tar.gz
 	cd live
 
-	echo "Timestamp patch: Replace gettimeofday() with clock_gettime(CLOCK_BOOTTIME,) in live555"
-     	find . -type f \( -name "*.cpp" -o -name "*.hpp" \) -print0 | while IFS= read -r -d $'\0' file; do
-        if grep -q 'gettimeofday.*NULL);' "$file"; then
-            echo "Patching $file"
-            sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_MONOTONIC, \&pruTs);\nTIMESPEC_TO_TIMEVAL(\1, \&pruTs);/g' "$file"
-	    cat "$file" | grep "clock_gettime(" -B 5 -A 5
-        fi
+	#echo "Timestamp patch: Replace gettimeofday() with clock_gettime(CLOCK_BOOTTIME,) in live555"
+     	#find . -type f \( -name "*.cpp" -o -name "*.hpp" \) -print0 | while IFS= read -r -d $'\0' file; do
+        #if grep -q 'gettimeofday.*NULL);' "$file"; then
+        #    echo "Patching $file"
+        #    sed -i 's/gettimeofday(\([^,]*\), NULL);/struct timespec pruTs;\nclock_gettime(CLOCK_MONOTONIC, \&pruTs);\nTIMESPEC_TO_TIMEVAL(\1, \&pruTs);/g' "$file"
+	#    cat "$file" | grep "clock_gettime(" -B 5 -A 5
+        #fi
 	#if [[ $(basename "$file") == "RTSPServer.cpp" ]]; then
  	   #echo "ADDING DEBUG $file"
 	   #sed -i '1i#define DEBUG 1\n' "$file"
@@ -121,7 +121,7 @@ deps() {
 #/; s/timeSinceLastSync >= curEntry->fDeltaTimeRemaining/curEntry != nullptr \&\& timeToProcess >= curEntry->fDeltaTimeRemaining/}' -e 's/timeSinceLastSync -/timeToProcess -/g' -e '/curEntry->fDeltaTimeRemaining -= timeSinceLastSync/s/timeSinceLastSync/timeToProcess/g' "$file"
 #  	cat "$file"
 #   	fi
-    	done
+#    	done
 
 	if [[ -f Makefile ]]; then
 		make distclean
