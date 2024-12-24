@@ -99,7 +99,7 @@ int main(int argc, const char *argv[])
         //clock_gettime(CLOCK_MONOTONIC, &timeSinceBoot);
         struct timeval imp_time_base;
         gettimeofday(&imp_time_base, NULL);
-        uint64_t time_base = ((uint64_t)imp_time_base.tv_sec * (uint64_t)1000000);
+        int64_t time_base = ((int64_t)imp_time_base.tv_sec * (int64_t)1000000) + (int64_t)imp_time_base.tv_usec;
         //uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000) + (timeSinceBoot.tv_nsec / 1000);
         IMP_System_RebaseTimeStamp(time_base);
         LOG_DEBUG("sizeof(time_t) => " << sizeof(time_t));
@@ -108,7 +108,11 @@ int main(int argc, const char *argv[])
             LOG_DEBUG("Seconds: " << tv.tv_sec);
             LOG_DEBUG("Microseconds: " << tv.tv_usec);
         }
-        LOG_DEBUG("IMP_System_RebaseTimeStamp(" << time_base << ");");
+        LOG_DEBUG("IMP_System_RebaseTimeStamp(" << (int64_t)time_base << ");");
+
+        
+LOG_DEBUG("IMP_System_RebaseTimeStamp(" << (int64_t)time_base << ");");
+IMP_System_RebaseTimeStamp((int64_t)time_base);
     }
 
     global_video[0] = std::make_shared<video_stream>(0, &cfg->stream0, "stream0");
