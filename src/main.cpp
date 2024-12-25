@@ -11,8 +11,8 @@
 #include "globals.hpp"
 #include "IMPSystem.hpp"
 #include "Motion.hpp"
+#include <iostream>
 #include <time.h>
-#include <cstdint>
 using namespace std::chrono;
 
 std::mutex mutex_main;
@@ -104,8 +104,8 @@ int main(int argc, const char *argv[])
         LOG_DEBUG("sizeof(time_base) => " << sizeof(time_base));
         //uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000) + (timeSinceBoot.tv_nsec / 1000);
         IMP_System_RebaseTimeStamp(time_base);
-        fprintf(stderr, "Value: %", time_base);
-        LOG_DEBUG("IMP_System_RebaseTimeStamp(" << time_base << ");");
+        std::cout << "time_base => " << time_base;
+        //LOG_DEBUG("IMP_System_RebaseTimeStamp(" << time_base << ");");
 
         
 LOG_DEBUG("IMP_System_RebaseTimeStamp(" << (int64_t)time_base << ");");
