@@ -10,6 +10,8 @@ using namespace std::chrono;
 #define EVENT_SIZE  (sizeof(struct inotify_event))
 #define EVENT_BUF_LEN (1024 * (EVENT_SIZE + 16))
 
+struct timeval imp_time_base;
+
 unsigned long long tDiffInMs(struct timeval *startTime)
 {
     struct timeval currentTime;
@@ -278,7 +280,6 @@ void *Worker::stream_grabber(void *arg)
     global_video[encChn]->imp_encoder = IMPEncoder::createNew(global_video[encChn]->stream, encChn, encChn, global_video[encChn]->name);
     global_video[encChn]->imp_framesource->enable();
 
-    struct timeval imp_time_base;
     gettimeofday(&imp_time_base, NULL);
     
     // inform main that initialization is complete
@@ -493,7 +494,8 @@ static void process_frame(int encChn, IMPAudioFrame &frame)
     encoder_time.tv_usec = audio_ts % 1000000;
 
     AudioFrame af;
-    af.time = encoder_time;
+    //af.time = encoder_time;
+    timeradd(&imp_time_base, &encoder_time, &af.time);
 
     uint8_t *start = (uint8_t *)frame.virAddr;
     uint8_t *end = start + frame.len;
