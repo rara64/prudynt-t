@@ -127,5 +127,4 @@ extern std::shared_ptr<jpeg_stream> global_jpeg[NUM_VIDEO_CHANNELS];
 extern std::shared_ptr<audio_stream> global_audio[NUM_AUDIO_CHANNELS];
 extern std::shared_ptr<video_stream> global_video[NUM_VIDEO_CHANNELS];
 
-extern struct timeval imp_time_base;
 #endif // GLOBALS_HPP
