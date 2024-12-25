@@ -104,7 +104,7 @@ int main(int argc, const char *argv[])
         LOG_DEBUG("sizeof(time_base) => " << sizeof(time_base));
         //uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000) + (timeSinceBoot.tv_nsec / 1000);
         IMP_System_RebaseTimeStamp(time_base);
-        LOG_DEBUG("sizeof(time_t) => " << sizeof(time_t));
+        fprintf(stderr, "Value: %", time_base);
         LOG_DEBUG("IMP_System_RebaseTimeStamp(" << time_base << ");");
 
         
