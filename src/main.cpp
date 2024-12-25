@@ -39,6 +39,7 @@ WS ws;
 RTSP rtsp;
 Motion motion;
 IMPSystem *imp_system = nullptr;
+static struct timeval time_base;
 
 bool timesync_wait()
 {
@@ -93,6 +94,7 @@ int main(int argc, const char *argv[])
     {
         imp_system = IMPSystem::createNew();
         IMP_System_RebaseTimeStamp(0);
+        gettimeofday(&time_base, NULL);
     }
 
     global_video[0] = std::make_shared<video_stream>(0, &cfg->stream0, "stream0");
