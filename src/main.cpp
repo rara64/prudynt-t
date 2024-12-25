@@ -92,12 +92,8 @@ int main(int argc, const char *argv[])
     if (!imp_system)
     {
         imp_system = IMPSystem::createNew();
+        IMP_System_RebaseTimeStamp(0);
     }
-
-    struct timeval timeNow;
-    gettimeofday(&timeNow, NULL);
-    int64_t imp_time_base = timeNow.tv_sec * 1000000 + timeNow.tv_usec;
-    IMP_System_RebaseTimeStamp(imp_time_base);
 
     global_video[0] = std::make_shared<video_stream>(0, &cfg->stream0, "stream0");
     global_video[1] = std::make_shared<video_stream>(1, &cfg->stream1, "stream1");
