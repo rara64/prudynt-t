@@ -12,6 +12,7 @@
 #include "IMPSystem.hpp"
 #include "Motion.hpp"
 #include <time.h>
+#include <cstdint>
 using namespace std::chrono;
 
 std::mutex mutex_main;
@@ -100,6 +101,7 @@ int main(int argc, const char *argv[])
         struct timeval imp_time_base;
         gettimeofday(&imp_time_base, NULL);
         int64_t time_base = imp_time_base.tv_sec * 1000000 + imp_time_base.tv_usec;
+        LOG_DEBUG("sizeof(time_base) => " << sizeof(time_base));
         //uint64_t imp_time_base = (timeSinceBoot.tv_sec * 1000000) + (timeSinceBoot.tv_nsec / 1000);
         IMP_System_RebaseTimeStamp(time_base);
         LOG_DEBUG("sizeof(time_t) => " << sizeof(time_t));
