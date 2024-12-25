@@ -338,7 +338,7 @@ void *Worker::stream_grabber(void *arg)
 
                         nalu.imp_ts = stream.pack[i].timestamp;
                         //nalu.time = encoder_time;
-                        timeradd(&time_base, &encoder_time, &nalu.time);
+                        timeradd(&imp_time_base, &encoder_time, &nalu.time);
 
                         // We use start+4 because the encoder inserts 4-byte MPEG
                         //'startcodes' at the beginning of each NAL. Live555 complains
@@ -491,7 +491,7 @@ static void process_frame(int encChn, IMPAudioFrame &frame)
 
     AudioFrame af;
     //af.time = encoder_time;
-    timeradd(&time_base, &encoder_time, &af.time);
+    timeradd(&imp_time_base, &encoder_time, &af.time);
 
     uint8_t *start = (uint8_t *)frame.virAddr;
     uint8_t *end = start + frame.len;
