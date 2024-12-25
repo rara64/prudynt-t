@@ -277,8 +277,6 @@ void *Worker::stream_grabber(void *arg)
     global_video[encChn]->imp_framesource = IMPFramesource::createNew(global_video[encChn]->stream, &cfg->sensor, encChn);
     global_video[encChn]->imp_encoder = IMPEncoder::createNew(global_video[encChn]->stream, encChn, encChn, global_video[encChn]->name);
     global_video[encChn]->imp_framesource->enable();
-
-    gettimeofday(&imp_time_base, NULL);
     
     // inform main that initialization is complete
     sh->has_started.release();
